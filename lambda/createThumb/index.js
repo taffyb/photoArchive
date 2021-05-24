@@ -29,6 +29,7 @@ exports.handler = async (event, context, callback) => {
       console.log(`Unsupported image type: ${imageType}`);
       return;
   }
+  console.log(`Image type supported: ${imageType}`);
 
   // Download the image from the S3 source bucket. 
 
