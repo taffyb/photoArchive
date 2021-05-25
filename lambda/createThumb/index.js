@@ -7,12 +7,12 @@ const sharp = require('sharp');
 const s3 = new AWS.S3();
 
 exports.handler = async (event, context, callback) => {
-
+  var snsMsgString = JSON.stringify(event.Records[0].Sns.Message);
+  var snsMsgObject = getSNSMessageObject(snsMsgString);
   // Read options from the event parameter.
   console.log("Reading options from event:\n", util.inspect(event, {depth: 5}));
-  const srcBucket = event.Records[0].s3.bucket.name;
-  // Object key may have spaces or unicode non-ASCII characters.
-  const srcKey    = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " "));
+  var srcBucket = snsMsgObject.Records[0].s3.bucket.name;
+  var srcKey = snsMsgObject.Records[0].s3.object.key;
   const dstBucket = srcBucket + "-thumbs";
   const dstKey    = "resized-" + srcKey;
 
@@ -77,4 +77,10 @@ exports.handler = async (event, context, callback) => {
   console.log('Successfully resized ' + srcBucket + '/' + srcKey +
       ' and uploaded to ' + dstBucket + '/' + dstKey); 
 };
-            
+function getSNSMessageObject(msgString) {
+    var x = msgString.replace(/\\/g,’’);
+    var y = x.substring(1,x.length-1);
+    var z = JSON.parse(y);
+    
+    return z;
+ }            
