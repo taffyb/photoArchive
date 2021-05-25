@@ -78,7 +78,7 @@ exports.handler = async (event, context, callback) => {
       ' and uploaded to ' + dstBucket + '/' + dstKey); 
 };
 function getSNSMessageObject(msgString) {
-    var x = msgString.replace(/\\/g,’’);
+    var x = msgString.replace(/\\/g,'');
     var y = x.substring(1,x.length-1);
     var z = JSON.parse(y);
     
