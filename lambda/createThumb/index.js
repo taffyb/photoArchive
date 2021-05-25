@@ -39,7 +39,7 @@ exports.handler = async (event, context, callback) => {
           Key: srcKey
       };
       var origimage = await s3.getObject(params).promise();
-
+      console.log(`origimage retrieved: ${JSON.stringify(params,null,2)}`);
   } catch (error) {
       console.log(error);
       return;
@@ -51,6 +51,7 @@ exports.handler = async (event, context, callback) => {
   // Use the sharp module to resize the image and save in a buffer.
   try { 
       var buffer = await sharp(origimage.Body).resize(width).toBuffer();
+      console.log(`origimage resized and written to buffer.`);
           
   } catch (error) {
       console.log(error);
